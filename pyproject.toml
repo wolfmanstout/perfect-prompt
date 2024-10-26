@@ -1,0 +1,12 @@
+[project]
+name = "perfect-prompt"
+version = "0.1.0"
+description = "Uses a visual LLM to iterate and perfect your image generation prompt."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.1",
+]
