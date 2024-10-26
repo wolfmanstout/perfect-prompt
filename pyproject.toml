@@ -4,9 +4,20 @@ version = "0.1.0"
 description = "Uses a visual LLM to iterate and perfect your image generation prompt."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "click>=8.1.7",
+    "huggingface-hub>=0.26.1",
+    "mistral-common>=1.4.4",
+    "mistral-inference>=0.0.0",
+    "torch==2.4.1+cu124",
+    "torchaudio==2.4.1+cu124",
+    "torchvision==0.19.1+cu124",
+]
 
 [dependency-groups]
 dev = [
     "pre-commit>=4.0.1",
 ]
+
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cu124"
