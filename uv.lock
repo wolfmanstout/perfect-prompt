@@ -561,6 +561,7 @@ dependencies = [
     { name = "torch" },
     { name = "torchaudio" },
     { name = "torchvision" },
+    { name = "xformers" },
 ]
 
 [package.dependency-groups]
@@ -577,6 +578,7 @@ requires-dist = [
     { name = "torch", specifier = "==2.4.1+cu124", index = "https://download.pytorch.org/whl/cu124" },
     { name = "torchaudio", specifier = "==2.4.1+cu124", index = "https://download.pytorch.org/whl/cu124" },
     { name = "torchvision", specifier = "==0.19.1+cu124", index = "https://download.pytorch.org/whl/cu124" },
+    { name = "xformers", specifier = ">=0.0.28.post1", index = "https://download.pytorch.org/whl/cu124" },
 ]
 
 [package.metadata.dependency-groups]
@@ -1119,13 +1121,14 @@ wheels = [
 [[package]]
 name = "xformers"
 version = "0.0.28.post1"
-source = { registry = "https://pypi.org/simple" }
+source = { registry = "https://download.pytorch.org/whl/cu124" }
 dependencies = [
     { name = "numpy" },
     { name = "torch" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/02/a0/59e379cf46cdbc6dbe7394cf8f063a1c5b3bee0cf297bb6040d52463535c/xformers-0.0.28.post1.tar.gz", hash = "sha256:5b292643885983950f6e2e3aed08dfd6b175ac8b725802f6f3e527b5a22e2a9b", size = 7762454 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2a/5b/242c68fb8c932815f8f2beea123e6a0dae1b703d87509af28aeddbd6d59b/xformers-0.0.28.post1-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:33f594c01d0a803a782eac5a1824ed7631baf15cfa2d34400013b2976913dd27", size = 16653565 },
-    { url = "https://files.pythonhosted.org/packages/68/50/47113ab104ff0009664698b6fee1c3269586d6e62a4d5469843571557364/xformers-0.0.28.post1-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:c3becc9bc5bcbbadda87e67ad764b29550ed40ca885cabea890f68e50d43fc5d", size = 16653188 },
+    { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:54703d19f41d9f04c50f86300a11be7db9239118b8d4f5110aee64f8ab8b3ba1" },
+    { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp311-cp311-win_amd64.whl", hash = "sha256:16b6558d50ee174ec41d3dde6d694fbad1f89ebb95d4f8c2a552d9fea7d3b9be" },
+    { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:e0b11c1d9dd1a3e2ca7b3e8c554a1fa3eabe77cf797b6c6c3c27007ab0f68029" },
+    { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp312-cp312-win_amd64.whl", hash = "sha256:ae863a42667c65b470c390527ab09adabd0270e1ba1c063a9df832f32962984a" },
 ]

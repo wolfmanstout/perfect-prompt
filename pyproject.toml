@@ -12,6 +12,7 @@ dependencies = [
     "torch==2.4.1+cu124",
     "torchaudio==2.4.1+cu124",
     "torchvision==0.19.1+cu124",
+    "xformers>=0.0.28.post1",
 ]
 
 [dependency-groups]
@@ -23,6 +24,7 @@ dev = [
 torch = { index = "pytorch" }
 torchaudio = { index = "pytorch" }
 torchvision = { index = "pytorch" }
+xformers = { index = "pytorch" }
 
 [[tool.uv.index]]
 name = "pytorch"
