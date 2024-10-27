@@ -63,7 +63,7 @@ def refine_prompt(
     revision_prompt = textwrap.dedent(f"""
         We need to create a prompt for image generation that reflects the following intent:
         {original_prompt}
-        
+
         Here are the previous prompt attempts, and how well each performed:
         {previous_attempts}
 
@@ -73,7 +73,19 @@ def refine_prompt(
     revision_request = ChatCompletionRequest(
         messages=[UserMessage(content=[TextChunk(text=revision_prompt)])]
     )
-    refined_prompt = process_prompt(revision_request, tokenizer, model)
+
+    max_attempts = 3
+    attempts = 0
+    while attempts < max_attempts:
+        refined_prompt = process_prompt(revision_request, tokenizer, model)
+        if (
+            refined_prompt not in [pair[0] for pair in previous_attempt_pairs]
+            and refined_prompt != current_prompt
+        ):
+            break
+
+        print("Skipping duplicate prompt")
+        attempts += 1
 
     del model
     del tokenizer
