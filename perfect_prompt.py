@@ -1,6 +1,7 @@
 import click
 
 import flux
+import fluxpro
 import refine
 
 
@@ -18,7 +19,15 @@ import refine
     default="local-mistral",
     help="Model to use for refining prompts",
 )
-def generate_and_refine(prompt_path, iterations, comfy_output_dir, refine_model):
+@click.option(
+    "--gen-model",
+    default="flux",
+    type=click.Choice(["flux", "flux-pro"]),
+    help="Model to use for generating images",
+)
+def generate_and_refine(
+    prompt_path, iterations, comfy_output_dir, refine_model, gen_model
+):
     with open(prompt_path, "r") as file:
         initial_prompt = file.read().strip()
 
@@ -28,10 +37,19 @@ def generate_and_refine(prompt_path, iterations, comfy_output_dir, refine_model)
         click.echo(f"Iteration {i+1}/{iterations}")
         click.echo(f"Prompt: {current_prompt}")
 
-        current_image_path = flux.generate_image(current_prompt, comfy_output_dir)
+        if gen_model == "flux":
+            image_module = flux
+        elif gen_model == "flux-pro":
+            image_module = fluxpro
+        else:
+            assert False, f"Unexpected gen_model value: {gen_model}"
+
+        current_image_path = image_module.generate_image(
+            current_prompt, comfy_output_dir
+        )
         if refine_model.startswith("local"):
             # Free up memory for the local model to use
-            flux.free_memory()
+            image_module.free_memory()
         click.echo(f"Image: {current_image_path}")
 
         review, refined_prompt = refine.refine_prompt(
