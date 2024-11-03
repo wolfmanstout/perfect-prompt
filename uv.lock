@@ -241,6 +241,15 @@ wheels = [
 ]
 
 [[package]]
+name = "httpx-sse"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/60/8f4281fa9bbf3c8034fd54c0e7412e66edbab6bc74c4996bd616f8d0406e/httpx-sse-0.4.0.tar.gz", hash = "sha256:1e81a3a3070ce322add1d3529ed42eb5f70817f45ed6ec915ab753f961139721", size = 12624 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e1/9b/a181f281f65d776426002f330c31849b86b31fc9d848db62e16f03ff739f/httpx_sse-0.4.0-py3-none-any.whl", hash = "sha256:f329af6eae57eaa2bdfd962b42524764af68075ea87370a2de920af5341e318f", size = 7819 },
+]
+
+[[package]]
 name = "huggingface-hub"
 version = "0.26.1"
 source = { registry = "https://pypi.org/simple" }
@@ -425,6 +434,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/5b/d8/5ba3f9fd6228ab91a96308c6da62414357c9944ed6fa1576975d5c41df66/llm_gemini-0.3.tar.gz", hash = "sha256:5e9fbe25910c61a3ea0434d94f2d07123f7f76468231f6e8a7b8ca17c855e37f", size = 9442 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/65/80/7b14867041437955add9ce530be4a6bd955502a411c63e8dd87640fd5d88/llm_gemini-0.3-py3-none-any.whl", hash = "sha256:b795c7c809790f2b1f5337398b89c2bb81576e0f6f6dc48049f63444f64f7757", size = 9737 },
+]
+
+[[package]]
+name = "llm-mistral"
+version = "0.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "httpx-sse" },
+    { name = "llm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/de/30/7b58496ef366e378cf8e7de446ee6bc7d95df551edec788697d47e5f0691/llm_mistral-0.7.tar.gz", hash = "sha256:0242ccc9c09de2c07e612dfedb4fe5dfdc006b670836c6b27900a525214628a6", size = 11197 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/2d/a5ab4bb424701cf90d0261b4e21073841df4564a9aa3d4b31f5aa07538ef/llm_mistral-0.7-py3-none-any.whl", hash = "sha256:2ec7fdcbec65d0cce061fcd116ade514141e3611adec7bddc5183dfe09ee7426", size = 10471 },
 ]
 
 [[package]]
@@ -762,6 +785,7 @@ dependencies = [
     { name = "huggingface-hub" },
     { name = "llm" },
     { name = "llm-gemini" },
+    { name = "llm-mistral" },
     { name = "mistral-common", extra = ["opencv"] },
     { name = "mistral-inference" },
     { name = "python-dotenv" },
@@ -783,6 +807,7 @@ requires-dist = [
     { name = "huggingface-hub", specifier = ">=0.26.1" },
     { name = "llm", specifier = ">=0.17.1" },
     { name = "llm-gemini", specifier = ">=0.3" },
+    { name = "llm-mistral", specifier = ">=0.7" },
     { name = "mistral-common", extras = ["opencv"], specifier = ">=1.4.4" },
     { name = "mistral-inference", specifier = ">=1.5.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },

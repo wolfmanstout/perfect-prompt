@@ -9,6 +9,7 @@ dependencies = [
     "httpx>=0.27.2",
     "huggingface-hub>=0.26.1",
     "llm-gemini>=0.3",
+    "llm-mistral>=0.7",
     "llm>=0.17.1",
     "mistral-common[opencv]>=1.4.4",
     "mistral-inference>=1.5.0",
