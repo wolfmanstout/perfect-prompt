@@ -215,7 +215,6 @@ def generate_image(prompt, comfy_output_dir):
             break
         time.sleep(5)
 
-    free_memory()
     return latest_image
 
 

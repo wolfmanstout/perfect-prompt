@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "click>=8.1.7",
     "huggingface-hub>=0.26.1",
+    "llm>=0.17.1",
     "mistral-common[opencv]>=1.4.4",
     "mistral-inference>=1.5.0",
     "torch==2.4.1+cu124",

@@ -1,7 +1,7 @@
 import click
 
 import flux
-import pixtral
+import refine
 
 
 @click.command()
@@ -13,7 +13,12 @@ import pixtral
     type=click.Path(exists=True),
     help="Directory where generated images are found",
 )
-def generate_and_refine(prompt_path, iterations, comfy_output_dir):
+@click.option(
+    "--refine-model",
+    default="local-mistral",
+    help="Model to use for refining prompts",
+)
+def generate_and_refine(prompt_path, iterations, comfy_output_dir, refine_model):
     with open(prompt_path, "r") as file:
         initial_prompt = file.read().strip()
 
@@ -24,10 +29,17 @@ def generate_and_refine(prompt_path, iterations, comfy_output_dir):
         click.echo(f"Prompt: {current_prompt}")
 
         current_image_path = flux.generate_image(current_prompt, comfy_output_dir)
+        if refine_model.startswith("local"):
+            # Free up memory for the local model to use
+            flux.free_memory()
         click.echo(f"Image: {current_image_path}")
 
-        review, refined_prompt = pixtral.refine_prompt(
-            initial_prompt, current_prompt, current_image_path, previous_attempts
+        review, refined_prompt = refine.refine_prompt(
+            initial_prompt,
+            current_prompt,
+            current_image_path,
+            previous_attempts,
+            refine_model=refine_model,
         )
         click.echo(f"Review: {review}")
 
