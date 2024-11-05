@@ -1,7 +1,7 @@
 import click
 
 import flux
-import fluxpro
+import fluxapi
 import refine
 
 
@@ -21,8 +21,8 @@ import refine
 )
 @click.option(
     "--gen-model",
-    default="flux",
-    type=click.Choice(["flux", "flux-pro"]),
+    default="local-flux",
+    type=click.Choice(["local-flux", "flux-pro-1.1", "flux-pro", "flux-dev"]),
     help="Model to use for generating images",
 )
 def generate_and_refine(
@@ -37,15 +37,13 @@ def generate_and_refine(
         click.echo(f"Iteration {i+1}/{iterations}")
         click.echo(f"Prompt: {current_prompt}")
 
-        if gen_model == "flux":
+        if gen_model == "local-flux":
             image_module = flux
-        elif gen_model == "flux-pro":
-            image_module = fluxpro
         else:
-            assert False, f"Unexpected gen_model value: {gen_model}"
+            image_module = fluxapi
 
         current_image_path = image_module.generate_image(
-            current_prompt, comfy_output_dir
+            current_prompt, comfy_output_dir, model=gen_model
         )
         if refine_model.startswith("local"):
             # Free up memory for the local model to use

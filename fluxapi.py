@@ -12,11 +12,11 @@ BASE_URL = "https://api.bfl.ml"
 HEADERS = {"x-key": API_KEY}
 
 
-def generate_image(prompt, output_dir, width=1216, height=832):
+def generate_image(prompt, output_dir, model, width=1216, height=832):
     # Submit generation request
     with httpx.Client() as client:
         response = client.post(
-            f"{BASE_URL}/v1/flux-pro-1.1",
+            f"{BASE_URL}/v1/{model}",
             headers=HEADERS,
             json={
                 "prompt": prompt,
@@ -47,7 +47,7 @@ def generate_image(prompt, output_dir, width=1216, height=832):
 
                 # Save the image
                 timestamp = int(time.time() * 1000)
-                output_path = Path(output_dir) / f"flux_pro_1_1_{timestamp}.png"
+                output_path = Path(output_dir) / f"{model}_{timestamp}.png"
                 output_path.write_bytes(image_response.content)
                 return output_path
 
