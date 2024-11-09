@@ -4,6 +4,7 @@ from pathlib import Path
 
 import httpx
 from dotenv import load_dotenv
+from PIL import Image, PngImagePlugin
 
 load_dotenv()
 
@@ -53,6 +54,15 @@ def generate_image(prompt, output_dir, model, width=1216, height=832, raw=False)
                 timestamp = int(time.time() * 1000)
                 output_path = Path(output_dir) / f"{model}_{timestamp}.png"
                 output_path.write_bytes(image_response.content)
+
+                # Embed metadata
+                image = Image.open(output_path)
+                metadata = PngImagePlugin.PngInfo()
+                metadata.add_text("prompt", prompt)
+                metadata.add_text("model", model)
+                metadata.add_text("raw", str(raw))
+                image.save(output_path, "PNG", pnginfo=metadata)
+
                 return output_path
 
             elif result_data["status"] in [
