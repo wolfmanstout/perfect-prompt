@@ -12,21 +12,25 @@ BASE_URL = "https://api.bfl.ml"
 HEADERS = {"x-key": API_KEY}
 
 
-def generate_image(prompt, output_dir, model, width=1216, height=832):
+def generate_image(prompt, output_dir, model, width=1216, height=832, raw=False):
     # Submit generation request
     with httpx.Client() as client:
+        payload = {
+            "prompt": prompt,
+            "width": width,
+            "height": height,
+            "seed": 42,
+            "output_format": "png",
+            "prompt_upsampling": False,
+            "safety_tolerance": 6,
+        }
+        if raw:
+            payload["raw"] = True
+
         response = client.post(
             f"{BASE_URL}/v1/{model}",
             headers=HEADERS,
-            json={
-                "prompt": prompt,
-                "width": width,
-                "height": height,
-                "seed": 42,
-                "output_format": "png",
-                "prompt_upsampling": False,
-                "safety_tolerance": 6,
-            },
+            json=payload,
         )
         response.raise_for_status()
         task_id = response.json()["id"]

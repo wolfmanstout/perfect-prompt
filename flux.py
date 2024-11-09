@@ -199,7 +199,7 @@ WORKFLOW_TEXT = """
 """
 
 
-def generate_image(prompt, comfy_output_dir, model=None):
+def generate_image(prompt, comfy_output_dir, model=None, raw=False):
     # Get the initial list of files
     initial_files = set(Path(comfy_output_dir).glob("*.png"))
 
