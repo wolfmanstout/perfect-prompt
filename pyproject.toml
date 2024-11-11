@@ -20,11 +20,6 @@ dependencies = [
     "xformers>=0.0.28.post1",
 ]
 
-[dependency-groups]
-dev = [
-    "pre-commit>=4.0.1",
-]
-
 [tool.uv.sources]
 torch = { index = "pytorch" }
 torchaudio = { index = "pytorch" }
@@ -35,3 +30,20 @@ xformers = { index = "pytorch" }
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cu124"
 explicit = true
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+ignore = ["E501", "SIM105", "SIM116", "UP007"]

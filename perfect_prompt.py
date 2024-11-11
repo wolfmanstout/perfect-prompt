@@ -35,7 +35,7 @@ import refine
 def generate_and_refine(
     prompt_path, iterations, comfy_output_dir, refine_model, gen_model, raw
 ):
-    with open(prompt_path, "r") as file:
+    with open(prompt_path) as file:
         initial_prompt = file.read().strip()
 
     current_prompt = initial_prompt
@@ -44,10 +44,7 @@ def generate_and_refine(
         click.echo(f"Iteration {i+1}/{iterations}")
         click.echo(f"Prompt: {current_prompt}")
 
-        if gen_model == "local-flux":
-            image_module = flux
-        else:
-            image_module = fluxapi
+        image_module = flux if gen_model == "local-flux" else fluxapi
 
         current_image_path = image_module.generate_image(
             current_prompt, comfy_output_dir, model=gen_model, raw=raw
