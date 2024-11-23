@@ -33,9 +33,11 @@ class PixtralModel:
         gc.collect()
         torch.cuda.empty_cache()
 
-    def process_prompt(self, completion_request):
+    def process_prompt(self, completion_request, temperature=None):
         assert self.model is not None, "Model is not loaded"
         assert self.tokenizer is not None, "Tokenizer is not loaded"
+        if temperature is None:
+            temperature = 0.35
         encoded = self.tokenizer.encode_chat_completion(completion_request)
 
         images = encoded.images
@@ -46,7 +48,7 @@ class PixtralModel:
             self.model,
             images=[images],
             max_tokens=1024,
-            temperature=0.35,
+            temperature=temperature,
             eos_id=self.tokenizer.instruct_tokenizer.tokenizer.eos_id,
         )
 

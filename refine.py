@@ -18,6 +18,8 @@ def refine_prompt(
     current_image_path,
     previous_attempt_pairs,
     refine_model,
+    review_temperature=None,
+    refine_temperature=None,
 ):
     if refine_model == "local-mistral":
         pixtral_model = PixtralModel()
@@ -47,11 +49,15 @@ def refine_prompt(
                 )
             ]
         )
-        review = pixtral_model.process_prompt(review_request)
+        review = pixtral_model.process_prompt(
+            review_request, temperature=review_temperature
+        )
     else:
         review = model.prompt(
-            review_prompt, attachments=[llm.Attachment(path=current_image_path)]
-        )
+            review_prompt,
+            attachments=[llm.Attachment(path=current_image_path)],
+            temperature=review_temperature,
+        ).text()
 
     previous_attempts = "\n\n".join(
         [
@@ -78,9 +84,13 @@ def refine_prompt(
             revision_request = ChatCompletionRequest(
                 messages=[UserMessage(content=[TextChunk(text=revision_prompt)])]
             )
-            refined_prompt = pixtral_model.process_prompt(revision_request)
+            refined_prompt = pixtral_model.process_prompt(
+                revision_request, temperature=refine_temperature
+            )
         else:
-            refined_prompt = model.prompt(revision_prompt).text()
+            refined_prompt = model.prompt(
+                revision_prompt, temperature=refine_temperature
+            ).text()
 
         if (
             refined_prompt not in [pair[0] for pair in previous_attempt_pairs]

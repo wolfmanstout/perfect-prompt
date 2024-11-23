@@ -32,8 +32,27 @@ import refine
     is_flag=True,
     help="Request raw-style image from the Flux API",
 )
+@click.option(
+    "--review-temperature",
+    default=None,
+    type=float,
+    help="Temperature setting for the review prompt",
+)
+@click.option(
+    "--refine-temperature",
+    default=None,
+    type=float,
+    help="Temperature setting for the refine prompt",
+)
 def generate_and_refine(
-    prompt_path, iterations, comfy_output_dir, refine_model, gen_model, raw
+    prompt_path,
+    iterations,
+    comfy_output_dir,
+    refine_model,
+    gen_model,
+    raw,
+    review_temperature,
+    refine_temperature,
 ):
     with open(prompt_path) as file:
         initial_prompt = file.read().strip()
@@ -60,6 +79,8 @@ def generate_and_refine(
             current_image_path,
             previous_attempts,
             refine_model=refine_model,
+            review_temperature=review_temperature,
+            refine_temperature=refine_temperature,
         )
         click.echo(f"Review: {review}")
 
