@@ -511,7 +511,8 @@ dependencies = [
     { name = "pillow" },
     { name = "safetensors" },
     { name = "simple-parsing" },
-    { name = "xformers" },
+    { name = "xformers", version = "0.0.28.post1", source = { registry = "https://download.pytorch.org/whl/cu124" }, marker = "platform_system != 'Darwin'" },
+    { name = "xformers", version = "0.0.28.post1", source = { registry = "https://pypi.org/simple" }, marker = "platform_system == 'Darwin'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/56/b6/3d0c14d7cbf622889be1498e73b414c516868adb5e3f0b201b562478c120/mistral_inference-1.5.0.tar.gz", hash = "sha256:0fdc290d5b960ebb43a5cbfdb70d74cdd901c8927c0f0ffd24cf6072f127638c", size = 29462 }
 wheels = [
@@ -761,10 +762,10 @@ dependencies = [
     { name = "mistral-common", extra = ["opencv"] },
     { name = "mistral-inference" },
     { name = "python-dotenv" },
-    { name = "torch" },
-    { name = "torchaudio" },
-    { name = "torchvision" },
-    { name = "xformers" },
+    { name = "torch", version = "2.4.1", source = { registry = "https://pypi.org/simple" }, marker = "platform_system == 'Darwin'" },
+    { name = "torch", version = "2.4.1+cu124", source = { registry = "https://download.pytorch.org/whl/cu124" }, marker = "platform_system != 'Darwin'" },
+    { name = "xformers", version = "0.0.28.post1", source = { registry = "https://download.pytorch.org/whl/cu124" }, marker = "platform_system != 'Darwin'" },
+    { name = "xformers", version = "0.0.28.post1", source = { registry = "https://pypi.org/simple" }, marker = "platform_system == 'Darwin'" },
 ]
 
 [package.dev-dependencies]
@@ -783,14 +784,14 @@ requires-dist = [
     { name = "mistral-common", extras = ["opencv"], specifier = ">=1.4.4" },
     { name = "mistral-inference", specifier = ">=1.5.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
-    { name = "torch", specifier = "==2.4.1+cu124", index = "https://download.pytorch.org/whl/cu124" },
-    { name = "torchaudio", specifier = "==2.4.1+cu124", index = "https://download.pytorch.org/whl/cu124" },
-    { name = "torchvision", specifier = "==0.19.1+cu124", index = "https://download.pytorch.org/whl/cu124" },
-    { name = "xformers", specifier = ">=0.0.28.post1", index = "https://download.pytorch.org/whl/cu124" },
+    { name = "torch", marker = "platform_system != 'Darwin'", specifier = ">=2.4.1", index = "https://download.pytorch.org/whl/cu124" },
+    { name = "torch", marker = "platform_system == 'Darwin'", specifier = ">=2.4.1" },
+    { name = "xformers", marker = "platform_system != 'Darwin'", specifier = ">=0.0.28.post1", index = "https://download.pytorch.org/whl/cu124" },
+    { name = "xformers", marker = "platform_system == 'Darwin'", specifier = ">=0.0.28.post1" },
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest" }]
+dev = [{ name = "pytest", specifier = ">=8.3.3" }]
 
 [[package]]
 name = "pillow"
@@ -1346,13 +1347,40 @@ wheels = [
 
 [[package]]
 name = "torch"
+version = "2.4.1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.12' and platform_system == 'Darwin'",
+    "python_full_version >= '3.12' and platform_system == 'Darwin'",
+]
+dependencies = [
+    { name = "filelock", marker = "platform_system == 'Darwin'" },
+    { name = "fsspec", marker = "platform_system == 'Darwin'" },
+    { name = "jinja2", marker = "platform_system == 'Darwin'" },
+    { name = "networkx", marker = "platform_system == 'Darwin'" },
+    { name = "sympy", marker = "platform_system == 'Darwin'" },
+    { name = "typing-extensions", marker = "platform_system == 'Darwin'" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1f/34/c93873c37f93154d982172755f7e504fdbae6c760499303a3111ce6ce327/torch-2.4.1-cp311-none-macosx_11_0_arm64.whl", hash = "sha256:ddddbd8b066e743934a4200b3d54267a46db02106876d21cf31f7da7a96f98ea", size = 62145176 },
+    { url = "https://files.pythonhosted.org/packages/ac/30/8b6f77ea4ce84f015ee024b8dfef0dac289396254e8bfd493906d4cbb848/torch-2.4.1-cp312-none-macosx_11_0_arm64.whl", hash = "sha256:72b484d5b6cec1a735bf3fa5a1c4883d01748698c5e9cfdbeb4ffab7c7987e0d", size = 62123443 },
+]
+
+[[package]]
+name = "torch"
 version = "2.4.1+cu124"
 source = { registry = "https://download.pytorch.org/whl/cu124" }
+resolution-markers = [
+    "python_full_version < '3.12' and platform_machine == 'aarch64' and platform_system == 'Linux'",
+    "(python_full_version < '3.12' and platform_machine != 'aarch64' and platform_system != 'Darwin') or (python_full_version < '3.12' and platform_system != 'Darwin' and platform_system != 'Linux')",
+    "python_full_version >= '3.12' and platform_machine == 'aarch64' and platform_system == 'Linux'",
+    "(python_full_version >= '3.12' and platform_machine != 'aarch64' and platform_system != 'Darwin') or (python_full_version >= '3.12' and platform_system != 'Darwin' and platform_system != 'Linux')",
+]
 dependencies = [
-    { name = "filelock" },
-    { name = "fsspec" },
-    { name = "jinja2" },
-    { name = "networkx" },
+    { name = "filelock", marker = "platform_system != 'Darwin'" },
+    { name = "fsspec", marker = "platform_system != 'Darwin'" },
+    { name = "jinja2", marker = "platform_system != 'Darwin'" },
+    { name = "networkx", marker = "platform_system != 'Darwin'" },
     { name = "nvidia-cublas-cu12", marker = "platform_machine == 'x86_64' and platform_system == 'Linux'" },
     { name = "nvidia-cuda-cupti-cu12", marker = "platform_machine == 'x86_64' and platform_system == 'Linux'" },
     { name = "nvidia-cuda-nvrtc-cu12", marker = "platform_machine == 'x86_64' and platform_system == 'Linux'" },
@@ -1365,45 +1393,15 @@ dependencies = [
     { name = "nvidia-nccl-cu12", marker = "platform_machine == 'x86_64' and platform_system == 'Linux'" },
     { name = "nvidia-nvjitlink-cu12", marker = "platform_machine == 'x86_64' and platform_system == 'Linux'" },
     { name = "nvidia-nvtx-cu12", marker = "platform_machine == 'x86_64' and platform_system == 'Linux'" },
-    { name = "sympy" },
+    { name = "sympy", marker = "platform_system != 'Darwin'" },
     { name = "triton", marker = "python_full_version < '3.13' and platform_machine == 'x86_64' and platform_system == 'Linux'" },
-    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "platform_system != 'Darwin'" },
 ]
 wheels = [
     { url = "https://download.pytorch.org/whl/cu124/torch-2.4.1%2Bcu124-cp311-cp311-linux_x86_64.whl", hash = "sha256:16e4ef3b32b45a278a0c512723f81cfa57035ebd5a75dbc2fb1360197ae06acd" },
     { url = "https://download.pytorch.org/whl/cu124/torch-2.4.1%2Bcu124-cp311-cp311-win_amd64.whl", hash = "sha256:b0b3a904bc66cd6f54652d33b8509b5c64b862763c073a15cf740161c77debbc" },
     { url = "https://download.pytorch.org/whl/cu124/torch-2.4.1%2Bcu124-cp312-cp312-linux_x86_64.whl", hash = "sha256:975a1d0540ebe05f6f88f692bb9d848f7fac035343a91aef08f2b8d0040dde8c" },
     { url = "https://download.pytorch.org/whl/cu124/torch-2.4.1%2Bcu124-cp312-cp312-win_amd64.whl", hash = "sha256:d077728576768acbf0e4ce1b87164d1f3f75c17a9b1676c09e84c32ceeac1c06" },
-]
-
-[[package]]
-name = "torchaudio"
-version = "2.4.1+cu124"
-source = { registry = "https://download.pytorch.org/whl/cu124" }
-dependencies = [
-    { name = "torch" },
-]
-wheels = [
-    { url = "https://download.pytorch.org/whl/cu124/torchaudio-2.4.1%2Bcu124-cp311-cp311-linux_x86_64.whl", hash = "sha256:9045eeb86e8fc8767fb75224978051b114724d19af8f566c9dbd2c5c7d150f91" },
-    { url = "https://download.pytorch.org/whl/cu124/torchaudio-2.4.1%2Bcu124-cp311-cp311-win_amd64.whl", hash = "sha256:9be91e449abfa76cde0c5e1a4fb91200668eb4fa9177daa131bf335e8f13092a" },
-    { url = "https://download.pytorch.org/whl/cu124/torchaudio-2.4.1%2Bcu124-cp312-cp312-linux_x86_64.whl", hash = "sha256:8b30c2b3c893642cf10faeca887cebb3aac418c932358576cbb47447e9734029" },
-    { url = "https://download.pytorch.org/whl/cu124/torchaudio-2.4.1%2Bcu124-cp312-cp312-win_amd64.whl", hash = "sha256:616076cd3b69e73e79642486fd8642eaf58243f5ee16b5f6de13422142c273fe" },
-]
-
-[[package]]
-name = "torchvision"
-version = "0.19.1+cu124"
-source = { registry = "https://download.pytorch.org/whl/cu124" }
-dependencies = [
-    { name = "numpy" },
-    { name = "pillow" },
-    { name = "torch" },
-]
-wheels = [
-    { url = "https://download.pytorch.org/whl/cu124/torchvision-0.19.1%2Bcu124-cp311-cp311-linux_x86_64.whl", hash = "sha256:fc68074915f5b08c8928ee67bb12c9b8b5ef3db9b4d233cc109a7ccb13e43296" },
-    { url = "https://download.pytorch.org/whl/cu124/torchvision-0.19.1%2Bcu124-cp311-cp311-win_amd64.whl", hash = "sha256:f8e00f6fb2562ee0be2008fc1c91a99d990b91ee764b764669ecceae5a210e12" },
-    { url = "https://download.pytorch.org/whl/cu124/torchvision-0.19.1%2Bcu124-cp312-cp312-linux_x86_64.whl", hash = "sha256:cc02e67d09cad8ca39dd6a969f517cc35cac3708edbf58a4dfece3ac93a66872" },
-    { url = "https://download.pytorch.org/whl/cu124/torchvision-0.19.1%2Bcu124-cp312-cp312-win_amd64.whl", hash = "sha256:00ba20cb86664c8e51a001662ce320dc52137ee1e072842174e9d0f0b114020c" },
 ]
 
 [[package]]
@@ -1452,9 +1450,15 @@ wheels = [
 name = "xformers"
 version = "0.0.28.post1"
 source = { registry = "https://download.pytorch.org/whl/cu124" }
+resolution-markers = [
+    "python_full_version < '3.12' and platform_machine == 'aarch64' and platform_system == 'Linux'",
+    "(python_full_version < '3.12' and platform_machine != 'aarch64' and platform_system != 'Darwin') or (python_full_version < '3.12' and platform_system != 'Darwin' and platform_system != 'Linux')",
+    "python_full_version >= '3.12' and platform_machine == 'aarch64' and platform_system == 'Linux'",
+    "(python_full_version >= '3.12' and platform_machine != 'aarch64' and platform_system != 'Darwin') or (python_full_version >= '3.12' and platform_system != 'Darwin' and platform_system != 'Linux')",
+]
 dependencies = [
-    { name = "numpy" },
-    { name = "torch" },
+    { name = "numpy", marker = "platform_system != 'Darwin'" },
+    { name = "torch", version = "2.4.1+cu124", source = { registry = "https://download.pytorch.org/whl/cu124" }, marker = "platform_system != 'Darwin'" },
 ]
 wheels = [
     { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:54703d19f41d9f04c50f86300a11be7db9239118b8d4f5110aee64f8ab8b3ba1" },
@@ -1462,3 +1466,17 @@ wheels = [
     { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:e0b11c1d9dd1a3e2ca7b3e8c554a1fa3eabe77cf797b6c6c3c27007ab0f68029" },
     { url = "https://download.pytorch.org/whl/cu124/xformers-0.0.28.post1-cp312-cp312-win_amd64.whl", hash = "sha256:ae863a42667c65b470c390527ab09adabd0270e1ba1c063a9df832f32962984a" },
 ]
+
+[[package]]
+name = "xformers"
+version = "0.0.28.post1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.12' and platform_system == 'Darwin'",
+    "python_full_version >= '3.12' and platform_system == 'Darwin'",
+]
+dependencies = [
+    { name = "numpy", marker = "platform_system == 'Darwin'" },
+    { name = "torch", version = "2.4.1", source = { registry = "https://pypi.org/simple" }, marker = "platform_system == 'Darwin'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/02/a0/59e379cf46cdbc6dbe7394cf8f063a1c5b3bee0cf297bb6040d52463535c/xformers-0.0.28.post1.tar.gz", hash = "sha256:5b292643885983950f6e2e3aed08dfd6b175ac8b725802f6f3e527b5a22e2a9b", size = 7762454 }
