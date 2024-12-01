@@ -9,7 +9,7 @@ from mistral_common.protocol.instruct.messages import (
 )
 from mistral_common.protocol.instruct.request import ChatCompletionRequest
 
-from pixtral import PixtralModel
+from .pixtral import PixtralModel
 
 
 def refine_prompt(

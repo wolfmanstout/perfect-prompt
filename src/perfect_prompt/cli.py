@@ -1,11 +1,10 @@
 import click
 
-import flux
-import fluxapi
-import refine
+from . import flux, fluxapi, refine
 
 
 @click.command()
+@click.version_option()
 @click.argument("prompt_path", type=click.Path(exists=True))
 @click.option("--iterations", "-n", default=3, help="Number of refinement iterations")
 @click.option(
@@ -44,7 +43,7 @@ import refine
     type=float,
     help="Temperature setting for the refine prompt",
 )
-def generate_and_refine(
+def cli(
     prompt_path,
     iterations,
     comfy_output_dir,
@@ -89,7 +88,3 @@ def generate_and_refine(
         click.echo("\n\n")
 
     click.echo("Image generation and refinement complete.")
-
-
-if __name__ == "__main__":
-    generate_and_refine()
