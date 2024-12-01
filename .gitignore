@@ -10,3 +10,4 @@ venv
 /prompts/
 /images/
 .env
+.vscode/

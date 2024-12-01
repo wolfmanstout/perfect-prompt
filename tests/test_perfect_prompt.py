@@ -1,4 +1,5 @@
 from click.testing import CliRunner
+
 from perfect_prompt.cli import cli
 
 
