@@ -21,7 +21,7 @@ def refine_prompt(
     review_temperature=None,
     refine_temperature=None,
 ):
-    if refine_model == "local-mistral":
+    if refine_model == "local-pixtral":
         pixtral_model = PixtralModel()
         pixtral_model.load()
     else:
@@ -35,7 +35,7 @@ def refine_prompt(
         """)
     review_prompt = review_template.format(original_prompt=original_prompt)
 
-    if refine_model == "local-mistral":
+    if refine_model == "local-pixtral":
         # Read the image file and encode it in base64
         with open(current_image_path, "rb") as image_file:
             encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
@@ -85,7 +85,7 @@ def refine_prompt(
     max_attempts = 3
     attempts = 0
     while attempts < max_attempts:
-        if refine_model == "local-mistral":
+        if refine_model == "local-pixtral":
             revision_request = ChatCompletionRequest(
                 messages=[UserMessage(content=[TextChunk(text=revision_prompt)])]
             )
@@ -106,7 +106,7 @@ def refine_prompt(
         print("Skipping duplicate prompt")
         attempts += 1
 
-    if refine_model == "local-mistral":
+    if refine_model == "local-pixtral":
         pixtral_model.unload()
 
     return review, refined_prompt

@@ -15,7 +15,7 @@ from . import flux, fluxapi, refine
 )
 @click.option(
     "--refine-model",
-    default="local-mistral",
+    default="local-pixtral",
     help="Model to use for refining prompts",
 )
 @click.option(
