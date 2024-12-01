@@ -225,7 +225,8 @@ def generate_image(
 
 
 def move_image_to_output(image_path: Path, output_dir: Path):
-    output_path = output_dir / image_path.name
+    timestamp = int(time.time() * 1000)
+    output_path = output_dir / f"local-flux_{timestamp}.png"
     image_path.rename(output_path)
     return output_path
 
