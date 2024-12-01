@@ -13,7 +13,9 @@ BASE_URL = "https://api.bfl.ml"
 HEADERS = {"x-key": API_KEY}
 
 
-def generate_image(prompt, output_dir, model, width=1216, height=832, raw=False):
+def generate_image(
+    prompt, output_dir: Path, *, model, width=1216, height=832, raw=False, **_
+):
     # Submit generation request
     with httpx.Client() as client:
         payload = {
@@ -52,7 +54,7 @@ def generate_image(prompt, output_dir, model, width=1216, height=832, raw=False)
 
                 # Save the image
                 timestamp = int(time.time() * 1000)
-                output_path = Path(output_dir) / f"{model}_{timestamp}.png"
+                output_path = output_dir / f"{model}_{timestamp}.png"
                 output_path.write_bytes(image_response.content)
 
                 # Embed metadata

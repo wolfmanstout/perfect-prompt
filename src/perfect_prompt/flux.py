@@ -199,23 +199,35 @@ WORKFLOW_TEXT = """
 """
 
 
-def generate_image(prompt, comfy_output_dir, model=None, raw=False):
+def generate_image(
+    prompt,
+    output_dir: Path,
+    *,
+    comfy_output_dir: Path,
+    **_,
+):
     # Get the initial list of files
-    initial_files = set(Path(comfy_output_dir).glob("*.png"))
+    initial_files = set(comfy_output_dir.glob("*.png"))
 
     # Generate image with Flux
     queue_prompt(prompt)
 
     # Wait for the filesystem to update with the new image
     while True:
-        current_files = set(Path(comfy_output_dir).glob("*.png"))
+        current_files = set(comfy_output_dir.glob("*.png"))
         new_files = current_files - initial_files
         if new_files:
             latest_image = max(new_files, key=os.path.getctime)
             break
         time.sleep(5)
 
-    return latest_image
+    return move_image_to_output(latest_image, output_dir)
+
+
+def move_image_to_output(image_path: Path, output_dir: Path):
+    output_path = output_dir / image_path.name
+    image_path.rename(output_path)
+    return output_path
 
 
 def queue_prompt(prompt):

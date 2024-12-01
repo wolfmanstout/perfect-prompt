@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 
 from . import flux, fluxapi, refine
@@ -5,14 +7,20 @@ from . import flux, fluxapi, refine
 
 @click.command()
 @click.version_option()
-@click.argument("prompt_path", type=click.Path(exists=True))
-@click.option("--iterations", "-n", default=3, help="Number of refinement iterations")
+@click.argument("prompt", required=False)
 @click.option(
-    "--comfy-output-dir",
-    required=True,
-    type=click.Path(exists=True),
-    help="Directory where generated images are found",
+    "--prompt-path",
+    type=click.Path(exists=True, path_type=Path),
+    help="Path to the prompt file",
 )
+@click.option(
+    "-o",
+    "--output-dir",
+    required=True,
+    type=click.Path(writable=True, path_type=Path),
+    help="Directory where final images will be saved",
+)
+@click.option("--iterations", "-n", default=3, help="Number of refinement iterations")
 @click.option(
     "--refine-model",
     default="local-pixtral",
@@ -25,6 +33,11 @@ from . import flux, fluxapi, refine
         ["local-flux", "flux-pro-1.1-ultra", "flux-pro-1.1", "flux-pro", "flux-dev"]
     ),
     help="Model to use for generating images",
+)
+@click.option(
+    "--comfy-output-dir",
+    type=click.Path(exists=True, path_type=Path),
+    help="Directory where generated images are found (required if using local-flux)",
 )
 @click.option(
     "--raw",
@@ -44,17 +57,28 @@ from . import flux, fluxapi, refine
     help="Temperature setting for the refine prompt",
 )
 def cli(
-    prompt_path,
+    prompt: str,
+    prompt_path: Path,
+    output_dir: Path,
     iterations,
-    comfy_output_dir,
     refine_model,
     gen_model,
+    comfy_output_dir: Path,
     raw,
     review_temperature,
     refine_temperature,
 ):
-    with open(prompt_path) as file:
-        initial_prompt = file.read().strip()
+    if prompt_path and prompt:
+        raise click.UsageError("Cannot use both --prompt-path and --prompt options.")
+    if not prompt_path and not prompt:
+        raise click.UsageError("One of --prompt-path or --prompt must be set.")
+
+    if gen_model == "local-flux" and not comfy_output_dir:
+        raise click.UsageError("--comfy-output-dir is required when using local-flux.")
+
+    initial_prompt = prompt_path.read_text().strip() if prompt_path else prompt.strip()
+
+    output_dir.mkdir(exist_ok=True, parents=True)
 
     current_prompt = initial_prompt
     previous_attempts = []
@@ -65,7 +89,11 @@ def cli(
         image_module = flux if gen_model == "local-flux" else fluxapi
 
         current_image_path = image_module.generate_image(
-            current_prompt, comfy_output_dir, model=gen_model, raw=raw
+            current_prompt,
+            output_dir,
+            comfy_output_dir=comfy_output_dir,
+            model=gen_model,
+            raw=raw,
         )
         if refine_model.startswith("local"):
             # Free up memory for the local model to use

@@ -1,5 +1,6 @@
 import base64
 import textwrap
+from pathlib import Path
 
 import llm
 from mistral_common.protocol.instruct.messages import (
@@ -15,7 +16,7 @@ from .pixtral import PixtralModel
 def refine_prompt(
     original_prompt,
     current_prompt,
-    current_image_path,
+    current_image_path: Path,
     previous_attempt_pairs,
     refine_model,
     review_temperature=None,
@@ -37,8 +38,9 @@ def refine_prompt(
 
     if refine_model == "local-pixtral":
         # Read the image file and encode it in base64
-        with open(current_image_path, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+        encoded_string = base64.b64encode(current_image_path.read_bytes()).decode(
+            "utf-8"
+        )
         url = f"data:image/png;base64,{encoded_string}"
         review_request = ChatCompletionRequest(
             messages=[
