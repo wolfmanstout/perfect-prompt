@@ -27,12 +27,13 @@ def refine_prompt(
     else:
         model = llm.get_model(refine_model)
 
-    review_prompt = textwrap.dedent(f"""
+    review_template = textwrap.dedent("""\
         The image provided was generated from the following prompt:
         {original_prompt}
 
         Evaluate how well the generated image adhered to the prompt and its overall aesthetic quality. Describe which elements of the prompt are present and missing from the image, then finally provide an overall score from 1 (worst) to 10 (best).
         """)
+    review_prompt = review_template.format(original_prompt=original_prompt)
 
     if refine_model == "local-mistral":
         # Read the image file and encode it in base64
@@ -67,7 +68,7 @@ def refine_prompt(
             )
         ]
     )
-    revision_prompt = textwrap.dedent(f"""
+    revision_template = textwrap.dedent("""\
         We need to create a prompt for image generation that reflects the following intent:
         {original_prompt}
 
@@ -76,6 +77,10 @@ def refine_prompt(
 
         Write a new prompt to generate an image that captures all the elements of the original intent better than any of the previous attempts. Be creative; do not repeat any existing prompt. Output only the new prompt, with no intro or surrounding quotes.
         """)
+    revision_prompt = revision_template.format(
+        original_prompt=original_prompt,
+        previous_attempts=previous_attempts,
+    )
 
     max_attempts = 3
     attempts = 0
