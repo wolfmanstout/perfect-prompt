@@ -43,7 +43,7 @@ LLM_MISTRAL_KEY=<your key from https://console.mistral.ai/>
 BFL_API_KEY=<your key from https://docs.bfl.ml/>
 ```
 
-Many models are available for `--refine-model`, for example:
+Many models are available for `--refine-model` via Simon Willison’s [`llm` package](https://github.com/simonw/llm), for example:
 ```
 gpt-4o (uses OPENAI_API_KEY)
 gpt-4o-mini (uses OPENAI_API_KEY)
