@@ -7,11 +7,11 @@ from . import flux, fluxapi, refine
 
 @click.command()
 @click.version_option()
-@click.argument("prompt", required=False)
+@click.argument("prompt", required=True)
 @click.option(
-    "--prompt-path",
-    type=click.Path(exists=True, path_type=Path),
-    help="Path to the prompt file",
+    "--from-file",
+    is_flag=True,
+    help="Treat prompt argument as file path instead of literal text",
 )
 @click.option(
     "-o",
@@ -20,15 +20,23 @@ from . import flux, fluxapi, refine
     type=click.Path(writable=True, path_type=Path),
     help="Directory where final images will be saved",
 )
-@click.option("--iterations", "-n", default=3, help="Number of refinement iterations")
+@click.option(
+    "--iterations",
+    "-n",
+    default=3,
+    show_default=True,
+    help="Number of refinement iterations",
+)
 @click.option(
     "--refine-model",
     default="local-pixtral",
+    show_default=True,
     help="Model to use for refining prompts",
 )
 @click.option(
     "--gen-model",
     default="local-flux",
+    show_default=True,
     type=click.Choice(
         ["local-flux", "flux-pro-1.1-ultra", "flux-pro-1.1", "flux-pro", "flux-dev"]
     ),
@@ -46,19 +54,17 @@ from . import flux, fluxapi, refine
 )
 @click.option(
     "--review-temperature",
-    default=None,
     type=float,
     help="Temperature setting for the review prompt",
 )
 @click.option(
     "--refine-temperature",
-    default=None,
     type=float,
     help="Temperature setting for the refine prompt",
 )
 def cli(
     prompt: str,
-    prompt_path: Path,
+    from_file: bool,
     output_dir: Path,
     iterations,
     refine_model,
@@ -68,15 +74,13 @@ def cli(
     review_temperature,
     refine_temperature,
 ):
-    if prompt_path and prompt:
-        raise click.UsageError("Cannot use both --prompt-path and --prompt options.")
-    if not prompt_path and not prompt:
-        raise click.UsageError("One of --prompt-path or --prompt must be set.")
+    if from_file:
+        prompt = Path(prompt).read_text()
 
     if gen_model == "local-flux" and not comfy_output_dir:
         raise click.UsageError("--comfy-output-dir is required when using local-flux.")
 
-    initial_prompt = prompt_path.read_text().strip() if prompt_path else prompt.strip()
+    initial_prompt = prompt.strip()
 
     output_dir.mkdir(exist_ok=True, parents=True)
 
