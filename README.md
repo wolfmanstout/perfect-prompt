@@ -25,18 +25,26 @@ Optional: to run image generation locally, you will also need to
 Basic usage:
 
 ```
-perfect-prompt "a romantic couple walking along the beach holding hands and looking lovingly at each other, wearing beachwear, sunset, detailed faces, front view, soft focus, golden hour lighting, warm natural lighting." -o images -n 3 --comfy-output-dir="C:\ComfyUI_windows_portable\ComfyUI\output"
+perfect-prompt "A robot holding a bouquet of sunflowers, standing in front of a crumbling brick wall covered in graffiti." -o images -n 3 --comfy-output-dir="C:\ComfyUI_windows_portable\ComfyUI\output"
 ```
 
 This will generate 3 images attempting to adhere to this prompt within `./images`.
 
-By default, perfect-prompt uses local models. You can configure this behavior with flags. For example, here is a version of the above prompt that uses the same models via API:
+By default, perfect-prompt uses local models. You can configure this behavior with flags. For example, here is a version of the above prompt that uses models via API:
 
 ```
-perfect-prompt "a romantic couple walking along the beach holding hands and looking lovingly at each other, wearing beachwear, sunset, detailed faces, front view, soft focus, golden hour lighting, warm natural lighting." -o images -n 3 --refine-model=pixtral-12b --gen-model=flux-dev
+perfect-prompt "A robot holding a bouquet of sunflowers, standing in front of a crumbling brick wall covered in graffiti." -o images -n 3 --refine-model=pixtral-large --gen-model=flux-dev
 ```
 
-Since this uses APIs, you'll need keys set in your environment:
+And here is the resulting sequence of images:
+
+![Robot against a brick wall without graffiti, holding three folowers](demo/flux-dev_1736053101055.png)
+
+![Robot against a painted brick wall, holding a bouquet of flowers](demo/flux-dev_1736053124571.png)
+
+![Robot against a brick wall clearly painted with graffiti, holding a bouquet of flowers](demo/flux-dev_1736053150788.png)
+
+Since this uses APIs, you'll to set need keys in your environment:
 
 ```
 LLM_MISTRAL_KEY=<your key from https://console.mistral.ai/>
