@@ -87,7 +87,7 @@ def cli(
     current_prompt = initial_prompt
     previous_attempts = []
     for i in range(iterations):
-        click.echo(f"Iteration {i+1}/{iterations}")
+        click.echo(f"Iteration {i + 1}/{iterations}")
         click.echo(f"Prompt: {current_prompt}")
 
         image_module = flux if gen_model == "local-flux" else fluxapi
