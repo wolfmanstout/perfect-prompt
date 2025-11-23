@@ -11,10 +11,16 @@ Works best to improve adherence to complex prompts.
 
 ## Installation
 
-Install this tool using `pip` or `pipx`:
+Install this tool using `pip`, `pipx`, or `uv`:
 
 ```bash
 pip install perfect-prompt
+```
+
+Or using `uv`:
+
+```bash
+uv tool install perfect-prompt
 ```
 
 Optional: to run image generation locally, you will also need to
