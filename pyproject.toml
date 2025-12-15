@@ -11,29 +11,13 @@ classifiers = [
 dependencies = [
     "click>=8.1.7",
     "httpx>=0.27.2",
-    "huggingface-hub>=0.26.1",
     "llm-gemini>=0.3",
     "llm-mistral>=0.7",
+    "llm-ollama>=0.15.1",
     "llm>=0.17.1",
-    "mistral-common[opencv]>=1.4.4",
-    "mistral-inference>=1.5.0",
+    "pillow>=10.0.0",
     "python-dotenv>=1.0.1",
-    "torch>=2.4.1",
-    "xformers>=0.0.28.post1",
 ]
-
-[tool.uv.sources]
-torch = [
-  { index = "pytorch-cu124", marker = "platform_system != 'Darwin'"},
-]
-xformers = [
-  { index = "pytorch-cu124", marker = "platform_system != 'Darwin'"},
-]
-
-[[tool.uv.index]]
-name = "pytorch-cu124"
-url = "https://download.pytorch.org/whl/cu124"
-explicit = true
 
 [build-system]
 requires = ["hatchling"]

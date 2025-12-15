@@ -29,7 +29,7 @@ from . import flux, fluxapi, refine
 )
 @click.option(
     "--refine-model",
-    default="local-pixtral",
+    default="ministral-3:14b",
     show_default=True,
     help="Model to use for refining prompts",
 )
@@ -62,6 +62,11 @@ from . import flux, fluxapi, refine
     type=float,
     help="Temperature setting for the refine prompt",
 )
+@click.option(
+    "--free-vram",
+    is_flag=True,
+    help="Free image generation VRAM before running refine model",
+)
 def cli(
     prompt: str,
     from_file: bool,
@@ -73,6 +78,7 @@ def cli(
     raw,
     review_temperature,
     refine_temperature,
+    free_vram,
 ):
     if from_file:
         prompt = Path(prompt).read_text()
@@ -99,8 +105,7 @@ def cli(
             model=gen_model,
             raw=raw,
         )
-        if refine_model.startswith("local"):
-            # Free up memory for the local model to use
+        if free_vram:
             image_module.free_memory()
         click.echo(f"Image: {current_image_path}")
 

@@ -1,16 +1,7 @@
-import base64
 import textwrap
 from pathlib import Path
 
 import llm
-from mistral_common.protocol.instruct.messages import (
-    ImageURLChunk,
-    TextChunk,
-    UserMessage,
-)
-from mistral_common.protocol.instruct.request import ChatCompletionRequest
-
-from .pixtral import PixtralModel
 
 
 def create_review_prompt(original_prompt: str) -> str:
@@ -62,39 +53,15 @@ def refine_prompt(
     review_temperature=None,
     refine_temperature=None,
 ):
-    if refine_model == "local-pixtral":
-        pixtral_model = PixtralModel()
-        pixtral_model.load()
-    else:
-        model = llm.get_model(refine_model)
+    model = llm.get_model(refine_model)
 
     review_prompt = create_review_prompt(original_prompt)
 
-    if refine_model == "local-pixtral":
-        # Read the image file and encode it in base64
-        encoded_string = base64.b64encode(current_image_path.read_bytes()).decode(
-            "utf-8"
-        )
-        url = f"data:image/png;base64,{encoded_string}"
-        review_request = ChatCompletionRequest(
-            messages=[
-                UserMessage(
-                    content=[
-                        ImageURLChunk(image_url=url),
-                        TextChunk(text=review_prompt),
-                    ]
-                )
-            ]
-        )
-        review = pixtral_model.process_prompt(
-            review_request, temperature=review_temperature
-        )
-    else:
-        review = model.prompt(
-            review_prompt,
-            attachments=[llm.Attachment(path=current_image_path)],
-            temperature=review_temperature,
-        ).text()
+    review = model.prompt(
+        review_prompt,
+        attachments=[llm.Attachment(path=str(current_image_path))],
+        temperature=review_temperature,
+    ).text()
 
     revision_prompt = create_revision_prompt(
         original_prompt, current_prompt, review, previous_attempt_pairs
@@ -103,17 +70,9 @@ def refine_prompt(
     max_attempts = 3
     attempts = 0
     while attempts < max_attempts:
-        if refine_model == "local-pixtral":
-            revision_request = ChatCompletionRequest(
-                messages=[UserMessage(content=[TextChunk(text=revision_prompt)])]
-            )
-            refined_prompt = pixtral_model.process_prompt(
-                revision_request, temperature=refine_temperature
-            )
-        else:
-            refined_prompt = model.prompt(
-                revision_prompt, temperature=refine_temperature
-            ).text()
+        refined_prompt = model.prompt(
+            revision_prompt, temperature=refine_temperature
+        ).text()
 
         if (
             refined_prompt not in [pair[0] for pair in previous_attempt_pairs]
@@ -123,8 +82,5 @@ def refine_prompt(
 
         print("Skipping duplicate prompt")
         attempts += 1
-
-    if refine_model == "local-pixtral":
-        pixtral_model.unload()
 
     return review, refined_prompt

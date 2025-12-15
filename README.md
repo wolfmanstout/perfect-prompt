@@ -23,6 +23,12 @@ Or using `uv`:
 uv tool install perfect-prompt
 ```
 
+The default refine model (`ministral-3:14b`) requires [Ollama](https://ollama.com/) and must be installed via:
+
+```bash
+ollama pull ministral-3:14b
+```
+
 Optional: to run image generation locally, you will also need to
 [install ComfyUI with FLUX.1-dev](https://stable-diffusion-art.com/flux-comfyui/#Flux_regular_full_model).
 
