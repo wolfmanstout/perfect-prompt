@@ -29,15 +29,16 @@ The default refine model (`ministral-3:14b`) requires [Ollama](https://ollama.co
 ollama pull ministral-3:14b
 ```
 
-Optional: to run image generation locally, you will also need to
-[install ComfyUI with FLUX.1-dev](https://stable-diffusion-art.com/flux-comfyui/#Flux_regular_full_model).
+Optional: to run image generation locally, you will also need to install ComfyUI with one of the supported models:
+- [FLUX.1-dev](https://stable-diffusion-art.com/flux-comfyui/#Flux_regular_full_model) (`--gen-model=comfyui-flux`)
+- [FLUX.1-Krea-dev](https://huggingface.co/black-forest-labs/FLUX.1-Krea-dev) (`--gen-model=comfyui-flux-krea`)
 
 ## Usage
 
 Basic usage:
 
 ```
-perfect-prompt "A robot holding a bouquet of sunflowers, standing in front of a crumbling brick wall covered in graffiti." -o images -n 3 --comfy-output-dir="C:\ComfyUI_windows_portable\ComfyUI\output"
+perfect-prompt "A robot holding a bouquet of sunflowers, standing in front of a crumbling brick wall covered in graffiti." -o images -n 3 --comfyui-output-dir="C:\ComfyUI_windows_portable\ComfyUI\output"
 ```
 
 This will generate 3 images attempting to adhere to this prompt within `./images`.

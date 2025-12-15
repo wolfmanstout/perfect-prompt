@@ -35,17 +35,24 @@ from . import flux, fluxapi, refine
 )
 @click.option(
     "--gen-model",
-    default="local-flux",
+    default="comfyui-flux",
     show_default=True,
     type=click.Choice(
-        ["local-flux", "flux-pro-1.1-ultra", "flux-pro-1.1", "flux-pro", "flux-dev"]
+        [
+            "comfyui-flux",
+            "comfyui-flux-krea",
+            "flux-pro-1.1-ultra",
+            "flux-pro-1.1",
+            "flux-pro",
+            "flux-dev",
+        ]
     ),
     help="Model to use for generating images",
 )
 @click.option(
-    "--comfy-output-dir",
+    "--comfyui-output-dir",
     type=click.Path(exists=True, path_type=Path),
-    help="Directory where generated images are found (required if using local-flux)",
+    help="Directory where generated images are found (required if using comfyui-* models)",
 )
 @click.option(
     "--raw",
@@ -74,7 +81,7 @@ def cli(
     iterations,
     refine_model,
     gen_model,
-    comfy_output_dir: Path,
+    comfyui_output_dir: Path,
     raw,
     review_temperature,
     refine_temperature,
@@ -83,8 +90,10 @@ def cli(
     if from_file:
         prompt = Path(prompt).read_text()
 
-    if gen_model == "local-flux" and not comfy_output_dir:
-        raise click.UsageError("--comfy-output-dir is required when using local-flux.")
+    if gen_model.startswith("comfyui-") and not comfyui_output_dir:
+        raise click.UsageError(
+            "--comfyui-output-dir is required when using comfyui-* models."
+        )
 
     initial_prompt = prompt.strip()
 
@@ -96,12 +105,12 @@ def cli(
         click.echo(f"Iteration {i + 1}/{iterations}")
         click.echo(f"Prompt: {current_prompt}")
 
-        image_module = flux if gen_model == "local-flux" else fluxapi
+        image_module = flux if gen_model.startswith("comfyui-") else fluxapi
 
         current_image_path = image_module.generate_image(
             current_prompt,
             output_dir,
-            comfy_output_dir=comfy_output_dir,
+            comfyui_output_dir=comfyui_output_dir,
             model=gen_model,
             raw=raw,
         )
