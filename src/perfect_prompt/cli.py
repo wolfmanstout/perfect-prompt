@@ -45,6 +45,9 @@ from . import flux, fluxapi, refine
             "flux-pro-1.1",
             "flux-pro",
             "flux-dev",
+            "flux-2-max",
+            "flux-2-pro",
+            "flux-2-flex",
         ]
     ),
     help="Model to use for generating images",
