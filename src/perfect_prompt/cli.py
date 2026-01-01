@@ -2,7 +2,8 @@ from pathlib import Path
 
 import click
 
-from . import flux, fluxapi, refine
+from . import refine
+from .generate import get_generator
 
 
 @click.command()
@@ -41,6 +42,7 @@ from . import flux, fluxapi, refine
         [
             "comfyui-flux",
             "comfyui-flux-krea",
+            "comfyui-z-image-turbo",
             "flux-pro-1.1-ultra",
             "flux-pro-1.1",
             "flux-pro",
@@ -108,17 +110,16 @@ def cli(
         click.echo(f"Iteration {i + 1}/{iterations}")
         click.echo(f"Prompt: {current_prompt}")
 
-        image_module = flux if gen_model.startswith("comfyui-") else fluxapi
+        generator = get_generator(gen_model)
 
-        current_image_path = image_module.generate_image(
+        current_image_path = generator.generate_image(
             current_prompt,
             output_dir,
             comfyui_output_dir=comfyui_output_dir,
-            model=gen_model,
             raw=raw,
         )
         if free_vram:
-            image_module.free_memory()
+            generator.free_memory()
         click.echo(f"Image: {current_image_path}")
 
         review, refined_prompt = refine.refine_prompt(

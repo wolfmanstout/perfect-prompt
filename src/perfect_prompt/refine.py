@@ -69,6 +69,7 @@ def refine_prompt(
 
     max_attempts = 3
     attempts = 0
+    refined_prompt = current_prompt
     while attempts < max_attempts:
         refined_prompt = model.prompt(
             revision_prompt, temperature=refine_temperature
