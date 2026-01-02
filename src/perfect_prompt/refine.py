@@ -2,6 +2,7 @@ import textwrap
 from pathlib import Path
 
 import llm
+import llm_mistral
 
 
 def create_review_prompt(original_prompt: str) -> str:
@@ -53,6 +54,7 @@ def refine_prompt(
     review_temperature=None,
     refine_temperature=None,
 ):
+    llm_mistral.refresh_models()
     model = llm.get_model(refine_model)
 
     review_prompt = create_review_prompt(original_prompt)
