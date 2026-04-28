@@ -395,7 +395,12 @@ class BFLAPIGenerator(ImageGenerator):
 
                     return output_path
 
-                if status in ("Error", "Failed", "Request Moderated", "Content Moderated"):
+                if status in (
+                    "Error",
+                    "Failed",
+                    "Request Moderated",
+                    "Content Moderated",
+                ):
                     error_msg = poll_data.get("error", status)
                     raise RuntimeError(f"Generation failed: {error_msg}")
 
